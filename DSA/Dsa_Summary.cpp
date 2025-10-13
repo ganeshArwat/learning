@@ -19463,7 +19463,7 @@
             return result;  // Return the result of level order traversal
         }
 
-    // Level Order Traversal (Left -> Right)
+    
     // Right View
         vector<int> rightView(TreeNode* root) {
             vector<int> result;  // Result vector to store the right view nodes
