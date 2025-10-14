@@ -414,6 +414,28 @@ Keys:
 ---
 
 
+## Comparison Table
+
+| Algorithm          | Load Distribution         | Data Awareness   | Adding/Removing Servers | Complexity | Use Case                            |
+| ------------------ | ------------------------- | ---------------- | ----------------------- | ---------- | ----------------------------------- |
+| Round Robin        | Even (if uniform)         | ❌ Not data-aware | ❌ Reshuffles            | Simple     | Stateless servers, web servers      |
+| Bucketing / Modulo | Deterministic             | ✅ Data-aware     | ❌ Reshuffles all keys   | Simple     | Small clusters, fixed servers       |
+| Mapping Table      | Deterministic             | ✅ Exact          | ❌ Update table          | Medium     | Hot keys, fixed ranges              |
+| Consistent Hashing | Even (with virtual nodes) | ✅ Data-aware     | ✅ Minimal reshuffling   | Medium     | Large-scale clusters, NoSQL, caches |
+
+---
+
+### 🔹 Key Takeaways
+
+1. **Round Robin** → Good for stateless servers, bad for data-aware routing
+2. **Modulo / Bucketing** → Simple and deterministic, but doesn’t handle cluster changes well
+3. **Mapping Table** → Precise, but high management overhead
+4. **Consistent Hashing** → Best for scalable, dynamic clusters with minimal remapping
+
+---
+
+
+
 # Stateless Servers
 
 Stateless servers are servers that **do not maintain any session or client-specific data** between requests. Each request is **independent** and contains all the information needed to process it.
