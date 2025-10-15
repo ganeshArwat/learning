@@ -1,4 +1,3 @@
-Career Guidance Questions
 
 Current Skill Level:
 I Worked on PHP codeigniter for 2.3 years 
