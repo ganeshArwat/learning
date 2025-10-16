@@ -45,43 +45,47 @@
 
 ## **4. Professional Experience**
 
-### **React Developer | Velox solutions pvt ltd**
+### **React Developer | Velox Solutions Pvt. Ltd.**
 
 *Aug 2025 – Present*
 
 * Developed and maintained responsive web applications using React.js.
-* Integrated REST APIs and handled state management with Redux/React Query.
-* Collaborated with team to deliver high-quality features.
+* Integrated REST APIs and managed state using Redux/React Query.
+* Collaborated with a remote team from Maysure to deliver high-quality features.
 
-### **PHP CodeIgniter Developer | Previous Company**
+### **PHP CodeIgniter Developer | ITD Services Pvt. Ltd.**
 
-*May 2022 – Jully 2024*
+*May 2022 – July 2024*
 
-* Built backend APIs and MySQL-based web applications.
-* Optimized application performance and code quality.
+* Contributed to the development and maintenance of the core SaaS platform.
+* Designed and implemented a PDF labeling system across the SaaS platform.
+* Collaborated closely with cross-functional teams to implement business logic.
+* Optimized application performance and improved code quality.
+* Mentored and trained a team of junior developers and new joiners.
+* Actively participated in code reviews, deployment cycles, and performance optimization.
 
 ---
 
 ## **5. Projects**
 
+**Abhanga Masale E-commerce Web App – React + Node.js**
+**The Travel Empire – React + Tailwind Css**
+**CneMeet – React + Node.js**
+**Portfolio Website – React + Node.js**
+**CneDB – React + Node.js**
+**CneFood – React + Node.js**
+**Blind Assistant – React + Node.js**
+**CneExpense - The Bill Splitter**
 **CNELibrary – React + Node.js**
-
 * Developed a library management system front-end in React.
 * Implemented dynamic folder/file structure and integrated APIs.
 * Deployed on Vercel.
-
-**[Other Project Name] – [Tech Stack]**
-
-* Short description + role + achievements.
-
-*(Add all projects here; tag each with role relevance.)*
-
 ---
 
 ## **6. Education**
 
-* **Upskilling Course:** Full Stack Development & DSA (2023–2024)
-* **Bachelor’s Degree:** [College/University], 2018–2021
+* **Scaler Upskilling Course:** Full Stack Development & DSA (2024-Present)
+* **Bachelor’s Degree:** [College/University], 2019-2022
 
 ---
 
@@ -97,15 +101,5 @@
 
 * **Languages:** English (Fluent), Hindi (Native)
 * **Hobbies:** Tech learning, Blogging, Open-source contributions
-
----
-
-### ✅ **How to Use This Content File**
-
-1. **Pick the role**: e.g., React Developer, Full-Stack Developer, PHP Backend.
-2. **Select the professional summary** and **skills** relevant to the role.
-3. **Choose projects and experience points** that align with the role.
-4. **Keep education and certifications consistent**.
-5. Paste into your preferred resume format (Word, Google Docs, Canva).
 
 ---
