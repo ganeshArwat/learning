@@ -90,11 +90,20 @@
 ---
 
 ## **7. Certifications / Achievements**
+### Certifications
+* Meta Front-End Developer
+* Scaler Data Structures & Algorithms Skill Mastery
+* Build Responsive Real-World Websites with HTML and CSS
+* Scaler Database and Sql Skill Mastery
+* 15 Days of SQL: The Complete SQL MasterClass 2024
+* Scaler Javascript Skill Mastery
+* Scaler Frontend (React) Skill Mastery
+* Sclaer MERN Skill Mastery
+* Node.js, Express, MongoDB & More: The Complete Bootcamp
 
-* React.js / JavaScript Certification
-* Hackathon participation / Coding competitions
-* Other relevant tech achievements
-
+### Achievements
+* Secured First Rank in Bachelor’s Degree Program
+* Top 1% Learner At Scaler - A Milestone in My Scler Upskilling Journey
 ---
 
 ## **8. Optional Sections**
