@@ -69,23 +69,37 @@
 ## **5. Projects**
 
 **Abhanga Masale E-commerce Web App – React + Node.js**
+
 **The Travel Empire – React + Tailwind Css**
+
 **CneMeet – React + Node.js**
+
 **Portfolio Website – React + Node.js**
+
 **CneDB – React + Node.js**
+
 **CneFood – React + Node.js**
+
 **Blind Assistant – React + Node.js**
+
 **CneExpense - The Bill Splitter**
+
 **CNELibrary – React + Node.js**
 * Developed a library management system front-end in React.
 * Implemented dynamic folder/file structure and integrated APIs.
 * Deployed on Vercel.
 ---
+## **Education**
 
-## **6. Education**
+**Scaler Academy — Upskilling Program (Software Development & Problem Solving)**
+*Full Stack Development & Data Structures & Algorithms (May 2024 – Present)*
 
-* **Scaler Upskilling Course:** Full Stack Development & DSA (2024-Present)
-* **Bachelor’s Degree:** [College/University], 2019-2022
+* Ranked in the **Top 1% of Learners** — recognized milestone in my Scaler journey
+
+**Bachelor of Science (B.Sc) in Information Technology — University of Mumbai**
+*(Aug 2019 – Apr 2022)*
+
+* **Secured First Rank** in the Bachelor’s Degree Program
 
 ---
 
@@ -102,8 +116,10 @@
 * Node.js, Express, MongoDB & More: The Complete Bootcamp
 
 ### Achievements
-* Secured First Rank in Bachelor’s Degree Program
-* Top 1% Learner At Scaler - A Milestone in My Scler Upskilling Journey
+* **Secured First Rank** in Bachelor’s Degree Program (University of Mumbai)
+* **Top 1% Learner at Scaler** — recognized milestone in the Scaler Upskilling Program
+* **“Blind Assistant” Final Year Project** selected among the **Top 100 Innovative Projects** in Mumbai at the **CIIA Project Exhibition**
+
 ---
 
 ## **8. Optional Sections**
