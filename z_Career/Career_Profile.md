@@ -14,7 +14,34 @@
 
 ## **2. Professional Summary (Generic)**
 
-> React Developer with strong front-end skills and experience in PHP CodeIgniter. Skilled in building responsive and user-friendly web applications. Passionate about learning new technologies and delivering high-quality solutions.
+
+### **1. Frontend Developer / React Developer**
+
+> Passionate **Frontend Developer** with strong expertise in **React.js, Tailwind CSS, and modern JavaScript (ES6+)**. Experienced in building **responsive, high-performance, and SEO-optimized web applications**. Skilled at integrating APIs, state management (Redux/React Query), and delivering user-friendly interfaces with clean design principles.
+
+---
+
+### **2. Full-Stack Developer**
+
+> Full-Stack Developer with hands-on experience in **React.js, Node.js, Express.js, MongoDB, and SQL databases**. Skilled in building **end-to-end web applications**, from frontend UI/UX to backend API integration and database management. Adept at creating **responsive, scalable, and maintainable solutions** while collaborating in agile team environments.
+
+---
+
+### **3. Backend / Node.js Developer**
+
+> Backend Developer proficient in **Node.js, Express.js, and database management (MySQL, MongoDB, PostgreSQL)**. Experienced in designing and developing **REST APIs, integrating with frontend frameworks, and optimizing application performance**. Focused on building **secure, scalable, and efficient backend systems**.
+
+---
+
+### **4. React + UI/UX Focused Developer**
+
+> UI-focused **React Developer** with expertise in **Tailwind CSS, Shadcn UI, and responsive design**. Experienced in translating **designs into interactive and mobile-friendly web interfaces**, ensuring excellent user experience. Passionate about building **clean, modern, and visually appealing applications**.
+
+---
+
+### **5. Software Developer (Generic / Any Full-Stack Role)**
+
+> Software Developer skilled in **full-stack web development**, with experience in **React, Node.js, PHP CodeIgniter, databases, and responsive UI design**. Passionate about **solving complex problems, learning new technologies, and delivering high-quality software solutions**. Recognized for achieving measurable results in personal projects and professional assignments.
 
 ---
 
