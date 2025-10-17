@@ -114,7 +114,7 @@ CneMeet is a real-time multi-user video and audio conferencing web application w
 * Browser-based — no external installation required
 * Responsive UI for seamless experience across devices
 
-**Live Website:** [Example URL]
+**Live Website:** [https://cne-meet-pro.vercel.app/](https://cne-meet-pro.vercel.app/)
 
 ---
 
