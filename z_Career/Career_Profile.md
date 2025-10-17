@@ -5,7 +5,6 @@
 
 * **Full Name:** Ganesh Arwat
 * **Email:** [ganesharwat123@gmail.com](mailto:ganesharwat123@gmail.com)
-* **Phone:** +91-7039834218
 * **Location:** India
 * **LinkedIn:** [linkedin.com/in/ganesh](https://www.linkedin.com/in/ganesh-arwat/)
 * **GitHub:** [github.com/ganesh](https://github.com/ganeshArwat)
