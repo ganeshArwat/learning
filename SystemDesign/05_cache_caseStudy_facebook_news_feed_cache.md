@@ -384,3 +384,145 @@ Number of users per server = (2 billion posts per server) / (5000 posts per user
 * Reduces read latency and avoids repeated fan-out queries
 
 ---
+
+## ⚡ Caching the Newsfeed for All Users
+
+Fetching a user’s newsfeed requires:
+
+* Reading posts from all shards (**fan-out**)
+* Scoring posts against **2000+ parameters** (recency, shock value, etc.)
+
+This is **expensive**, so we cache results.
+
+---
+
+### **Newsfeed Size Estimation**
+
+* **Posts per page:** 10
+* **Max pages:** 50
+* **User example:** 1000 friends, each with 10 recent posts → 10,000 posts → limit to top 500 posts
+
+**Total newsfeed data size**:
+
+```
+Total Newsfeed size = (500 bytes/post) * (10 posts/page) * (50 pages/user) * (3 billion users)
+                    = 75 * 10,000 billion bytes
+                    = 750 TB
+```
+
+> ⚠️ Note: 20 years of posts = 400TB, but the newsfeed cache (recent posts replicated per user) = 750TB
+> Reason: Each post is potentially replicated in thousands of users’ newsfeeds.
+
+---
+
+### **Challenges with Caching Entire Newsfeed**
+
+1. Every new post invalidates friends’ newsfeeds (~1000 friends per user)
+2. Frequent updates to ranking algorithm (4–5 times/day) would invalidate the entire cache
+3. Precomputing and caching **all users’ newsfeeds** is impractical
+
+**Optimization Idea (Mukesh):**
+
+* Cache only the **first 5 pages** instead of all 50
+* Reduces cache size **10x** → from 750TB to ~75TB
+* High hit rate maintained
+
+---
+
+### **Optimizing Newsfeed Calculation**
+
+* Only **recent posts** matter (e.g., last 30 days)
+* **Size of recent 30 days of posts**:
+
+```
+Recent post data = 100 million posts/day * 500 bytes/post * 30 days
+                 = 15 * 10^5 million bytes
+                 = 1.5 TB
+```
+
+* 1.5TB easily fits on a single server
+* No need to shard the **recent posts DB** → no fan-out needed
+* Multiple read replicas can handle high request volume
+
+---
+
+### **Recent Posts DB Flow**
+
+1. Post is stored in user DB shards (author + recipient)
+2. Post is also inserted into **recent_posts_db**
+3. Profile queries still hit user shards
+4. Newsfeed queries now hit **recent_posts_db** → avoids fan-out
+
+> **Recent_posts_db** = SQL database, but used as a **cache** for faster access
+
+---
+
+### **Schema for Recent Posts DB**
+
+Same as user shards:
+
+```
+users
+  id, name, gender, ...
+user_friends
+  user_1_id, user_2_id, created_at
+user_posts
+  post_id, author_id, profile_id, content
+```
+
+---
+
+### **Eviction Policy**
+
+* Recent posts < 1.5TB → eviction not required
+* Optionally: set TTL to remove posts older than 30 days
+* If HDD full → evict **least recently updated** posts
+* Eviction happens **lazily** during inserts, not reads
+
+---
+
+### **Invalidation Policy**
+
+1. **Older posts**:
+
+   * Cron job at midnight removes posts older than 30 days
+
+   ```
+   DELETE FROM recent_posts_db.user_posts
+   WHERE updated_at < (NOW() - INTERVAL 30 DAY)
+   ```
+
+   * Or use TTL for lazy deletion
+
+2. **Edited posts**:
+
+   * Update user DB shards (author + recipient)
+   * Periodically replicate into **recent_posts_db**
+   * **Write-around caching**
+
+---
+
+### **Consistency Requirements**
+
+* **Eventual consistency** is acceptable:
+
+  * A post may take time to appear in friends’ newsfeeds
+  * Edited posts may temporarily show old versions
+
+---
+
+### **Learning**
+
+* Precomputing full newsfeed is **impractical**
+* Cache **recent posts** only → smaller, manageable, and fast
+
+---
+
+### **Mandatory Reading / References**
+
+* [Scaling with Redis – Eviction Policies & Cluster Mode](https://docs.google.com/document/d/1k4nzubvtX_yLctUT4VWK8ZJt4KCcOEdRJdxQgWCaiU8/edit?tab=t.0#heading=h.jyks8brdqpi5)
+* Backend Benchmarks: [TechEmpower](https://www.techempower.com/benchmarks/)
+* Frontend Framework Benchmarks: [JS Framework Benchmark](https://krausest.github.io/js-framework-benchmark/)
+
+---
+
