@@ -1256,3 +1256,188 @@ Zookeeper can maintain your **custom Master-Slave system**, e.g., for a database
   * FastLeaderElection.java
 
 ---
+# Zookeper Overview
+# 1) Short summary / goals
+
+ZooKeeper is a distributed coordination service that gives small, simple primitives for building distributed systems: **naming**, **configuration management**, **leader election**, **group membership**, **distributed locks**, **barriers**, etc.
+Design goals:
+
+* Strong correctness (consensus/total order for updates)
+* Simple read-optimized API (lots of reads, fewer writes)
+* Low latency, highly available for reads (subject to quorum for writes)
+* Small state and predictable behavior
+
+# 2) High-level architecture
+
+* **Ensemble**: N ZooKeeper servers (N is odd; e.g., 3,5,7). A majority (quorum) needed for writes.
+* **Leader**: chosen by leader-election; serializes all writes.
+* **Followers**: accept reads, forward writes to leader, participate in Zab.
+* **Observers**: non-voting members — receive updates from leader and serve reads (scale reads without affecting quorum).
+* **Clients**: connect to any server via TCP (session maintained with server). Client API supports get, set, create, delete, exists, getChildren, watches.
+
+```
+Clients  <---->  Server1 (Leader)
+Clients  <---->  Server2 (Follower)
+Clients  <---->  Server3 (Follower)
+(Observers can also accept reads)
+```
+
+# 3) Data model: znodes
+
+* Hierarchical tree (like a filesystem). Each node = **znode**.
+* znodes store small data blobs (recommended small, e.g., < 1MB) and metadata (stat).
+* Types:
+
+  * **Persistent** znode
+  * **Ephemeral** znode (tied to client session; removed when session ends)
+  * **Sequential** variant (append monotonically increasing sequence number)
+* Clients can **set watches** on znodes to get a one-time notification of change.
+
+# 4) Consistency, ordering, and guarantees
+
+ZooKeeper guarantees:
+
+* **Sequential consistency**: updates from a single client are applied in order.
+* **Atomicity**: updates either succeed or fail.
+* **Single system image**: clients view a single logical system.
+* **Reliability**: updates are persisted, replicated.
+* **Timeliness** (best effort): bounded latency in practice, but not strict real-time.
+
+Important:
+
+* **Writes** are totally ordered via the Zab protocol (leader decides order).
+* **Reads** served by any server may be slightly stale. To get fresh data, client can call `sync()` or read via the leader (or use read-after-write semantics by client syncing with the server known to have processed writes).
+* ZooKeeper is CP (Consistency + Partition tolerance) in CAP terms — it prefers consistency over availability for writes (if quorum can't be reached, writes fail).
+
+# 5) Zab (ZooKeeper Atomic Broadcast) — core protocol
+
+Zab is a variant of atomic broadcast / consensus used for leader-based total ordering. High level:
+
+**Phases:**
+
+1. **Leader election** (when cluster starts or leader fails). Elect leader with highest zxid/epoch.
+2. **Discovery/State synchronization**: new leader finds most up-to-date follower and ensures everyone has a consistent state.
+3. **Broadcast (normal operation)**:
+
+   * Client sends write request to any server → forwarded to leader.
+   * Leader assigns a **proposal** with a monotonically increasing zxid (ZooKeeper transaction id).
+   * Leader sends proposal to followers.
+   * Followers persist proposal and respond with ACK to leader.
+   * When leader receives ACKs from quorum, it **commits** the proposal and sends commit message.
+   * Followers apply the commit and reply to clients.
+
+Properties:
+
+* Total order of transactions.
+* Durability: follower persists to txn log before ACKing.
+* Quorum acknowledgements ensure correctness.
+
+# 6) Session & ephemeral nodes behavior
+
+* Each client has a **session id** and timeout. Server holding session acts as the session owner; if session times out (no heartbeats), server/ensemble expires session and deletes ephemeral znodes created by that session.
+* Sessions are maintained across server failures if quorum persists and session hasn’t timed out. Clients should handle reconnect logic.
+
+# 7) Watches
+
+* One-time triggers: when you set a watch, the next change fires a notification and the watch is removed.
+* Lightweight and good for many patterns, but watch storms can occur if many clients watch the same path and server goes through many updates.
+* Notifications are ordered w.r.t. transaction commits.
+
+# 8) Failure handling & recovery
+
+* **Leader failure**: triggers leader election. A new leader is selected (highest zxid/epoch) and synchronizes state via discovery.
+* **Follower failure**: handled if quorum remains. Recovered followers catch up via leader snapshot and transaction logs.
+* **Network partition**: partitions that don't have quorum cannot accept commits; that prevents split-brain.
+* **Disk loss / corrupted logs**: recommend backups of snapshots + txn logs.
+
+# 9) Scaling strategies
+
+* **Ensemble size**: typically 3 or 5. Larger ensembles increase failure tolerance but also increase commit latency (need quorum).
+* **Observers**: add observers to scale read throughput without increasing quorum size.
+* **Client-side tips**: use connection pooling, avoid frequent sync() calls, avoid huge znodes or very large lists of children.
+* **Sharding**: ZooKeeper is not meant as a large-scale key-value store. For massive data, shard responsibilities across multiple ensembles (each ensemble coordinates a subset of tasks).
+
+# 10) Typical deployment & ops (practical)
+
+* **Odd number of servers** (3,5). Keep servers on different machines/data centers (careful — cross-DC increases latency).
+* **TickTime**: heartbeat tick (affects session timeout granularity).
+* **initLimit & syncLimit**: how long followers can take to connect/sync with leader.
+* **Snapshots & txn logs**: configure regular snapshots; rotate logs to avoid huge recovery time.
+* **JVM tuning**: GC pauses can make servers unresponsive → tune heap, GC, and monitor.
+* **jute.maxbuffer**: controls max request/response size (prevent huge payloads).
+* **Security**: enable TLS for client-server and server-server, ACLs for znodes, authentication.
+
+# 11) Monitoring & KPIs
+
+Track:
+
+* Request latency (read/write separately)
+* Proposal creation rate / commit rate
+* Outstanding requests / queue length
+* Average time to commit a proposal
+* Disk flush latency / fsync times
+* JVM GC pause times
+* Number of active sessions, ephemeral znodes count
+* Snapshot frequency & log size
+  Alert on: long GC pauses, leader flaps, followers falling behind, low quorum.
+
+# 12) Design trade-offs & anti-patterns
+
+* **Not a DB**: znodes are for coordination and tiny metadata — not to store large blobs or millions of children under one znode.
+* **Consistency-first**: ZooKeeper sacrifices availability for writes under partitions; choose depending on application tolerance.
+* **Watch storms**: avoid thousands of watches on same node; use hierarchical watches or ephemeral sequential nodes for locks.
+* **Too large ensemble**: more fault tolerance vs higher write latency — pick carefully.
+
+# 13) Example flows & ASCII sequences
+
+**Write path** (client → leader → quorum → commit → client):
+
+```
+Client -> ServerA (forward if not leader) -> Leader
+Leader assigns zxid=100, creates proposal
+Leader -> Followers: PROPOSAL(zxid=100, txn)
+Followers persist, send ACK
+Leader sees quorum ACKs -> Leader sends COMMIT(zxid=100)
+Followers apply commit -> reply to client
+```
+
+**Leader election simplified**:
+
+* Servers exchange epochs/zxids.
+* Highest epoch + highest zxid candidate becomes leader.
+* New leader picks most up-to-date follower state and synchronizes.
+
+# 14) Common ZooKeeper design interview questions & answers
+
+Q: *Why does ZooKeeper use a leader?*
+A: To create a total order of updates. A single leader serializes writes, simplifying agreement and ensuring consistency.
+
+Q: *How does ZooKeeper guarantee no split-brain?*
+A: Writes require quorum. Partitions without a quorum cannot accept/succeed writes, preventing divergent commits.
+
+Q: *How to scale ZooKeeper for many reads?*
+A: Add observers (non-voting nodes) or add more follower servers in read-heavy clusters; use local caching at clients; avoid expensive sync() calls.
+
+Q: *How to implement a distributed lock with ZooKeeper?*
+A: Use ephemeral sequential znodes under a lock path. Client creates `/locks/lock-0001`, watches predecessor; when predecessor disappears, you own the lock. Ephemeral ensures cleanup on failure.
+
+Q: *What if a follower is slow?*
+A: Leader will wait up to `syncLimit` during sync/discovery; otherwise the follower is considered out-of-date and may be dropped until it catches up.
+
+# 15) Capacity planning (rules of thumb)
+
+* Keep znodes small (< 1KB - few KB typical).
+* Avoid directories with > tens of thousands of children.
+* For write-heavy workloads, prefer smaller ensemble sizes and co-locate low-latency nodes.
+* Plan for snapshot frequency to keep recovery time manageable.
+
+# 16) Advanced topics (where we can dive deeper)
+
+* Zab internals: epochs, leader checkpoints, recovery state machine.
+* Performance tuning: GC tuning, fsync patterns, batching of proposals.
+* Implementation of watches: how notifications propagate and guarantee ordering.
+* Multi-datacenter setups: pros/cons and use of observers vs cross-DC write latency.
+* Implementing higher-level primitives (barriers, locks, queues) and best patterns.
+
+---
+
