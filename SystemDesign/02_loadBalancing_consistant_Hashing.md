@@ -1,85 +1,137 @@
-# Load Balancing
+# ⚖️ **Load Balancing**
 
 Load balancing determines **which server should handle a particular request**.
-It is tightly coupled with **how data is distributed** across servers. If a request is sent to the wrong server, it will not find the user’s data.
+It ensures even distribution of traffic, optimal resource utilization, and high availability.
 
-Example: If Sanjana’s request goes to a server storing Ashok’s data → request fails.
+In **data-aware systems** (like sharded databases, distributed caches, etc.), load balancing is tightly coupled with **data distribution** — because if a request goes to the wrong server, the data won’t be found.
 
----
-
-## 1️⃣ Data Sharding
-
-Sharding is the process of **splitting data across multiple servers** to improve scalability and performance.
-
-### Types of Sharding
-
-1. **Vertical Partitioning (Normalization)**
-
-   * Divide data by **columns**.
-   * Example: `User(id, name, age, address)` → `UserBasic(id, name, age)` + `UserAddress(id, address)`.
-
-2. **Horizontal Partitioning**
-
-   * Divide data by **rows**.
-   * Example: `User` table → Server1: users 1–1000, Server2: users 1001–2000.
-
-3. **Vertical Partitioning (across servers)**
-
-   * Each server holds **different columns** of the same table.
-
-4. **Horizontal Partitioning (across servers)**
-
-   * Each server holds **different rows** (subset of users, orders, etc.).
+> Example:
+> If Sanjana’s user profile is stored on **Server B**, but the load balancer routes her request to **Server A**, the request fails (or returns “User not found”).
 
 ---
 
-## 2️⃣ Sharding
+## 🧩 **1️⃣ Data Sharding**
 
-Sharding ensures that each piece of data is placed on the correct server.
-
-### Sharding Key
-
-* The column or attribute used to determine the shard.
-* Example: `user_id` for user-related data.
-
-### Sharding and Routing
-
-* The logic for sharding **must match the routing logic**.
-* If sharding logic = A (e.g., hash(user_id) % N), then routing logic = A too.
-* **Mismatch leads to wrong servers being queried** → failed requests or high latency.
+**Sharding** is the process of **splitting large datasets into smaller, more manageable pieces (shards)** and distributing them across multiple servers.
+It improves **scalability**, **parallelism**, and **fault isolation**.
 
 ---
 
-## Routing Algorithm
-### Characteristics of good Routing Algo
-    - Fast
-    - Equal distribution
-    - We Should be able to freely add/remove servers
-    - Minimal data Movement
-    - Routing Should be derrministic without exchanging information
+### **Types of Sharding**
 
+#### 1. Vertical Partitioning (Normalization)
 
----
-# Round Robin Load Balancing
+* Data is divided by **columns (attributes)**.
+* Each table or microservice handles a subset of attributes.
 
-Round Robin is one of the simplest and most widely used load balancing strategies.
+**Example:**
 
----
+```
+User(id, name, age, address)
+→ UserBasic(id, name, age)
+→ UserAddress(id, address)
+```
 
-## 1️⃣ How it works
-
-* Requests are distributed **evenly across all available servers** in a **circular order**.
-* Each new request goes to the **next server in the list**, then loops back to the first server once all servers have received a request.
+✅ Efficient queries for specific attributes
+❌ Requires joins or multiple calls to rebuild full entity
 
 ---
 
-## 2️⃣ Example
+#### 2. Horizontal Partitioning (Row-wise)
 
-Assume 3 servers: **A, B, C**
+* Data is divided by **rows (records)**.
+* Each shard stores a **subset of users or objects**.
 
-Incoming requests: **R1, R2, R3, R4, R5, R6**
+**Example:**
 
-**Distribution:**
+```
+Server1 → user_id 1–1000  
+Server2 → user_id 1001–2000
+```
+
+✅ Most common approach in large systems
+✅ Each shard is independent
+❌ Choosing the right sharding key is critical (to avoid hotspots)
+
+---
+
+#### 3. Vertical Partitioning Across Servers
+
+* Different **columns** live on different **physical servers**.
+* Used when tables are very wide or have heavy column access patterns.
+
+---
+
+#### 4. Horizontal Partitioning Across Servers
+
+* Each server holds **different rows** of a single logical table.
+* Typically used with **routing algorithms** (hashing, consistent hashing, etc.) for distributing queries.
+
+---
+
+## 🔑 **2️⃣ Sharding Key**
+
+A **sharding key** is the attribute that decides **where a record lives**.
+
+**Example:**
+
+* `user_id` for user-related data
+* `region_id` for geo-distributed systems
+* `order_id` for e-commerce orders
+
+### **Good Sharding Key Characteristics**
+
+* **Uniformly distributed** (avoids hotspots)
+* **Immutable** (should not change over time)
+* **Present in most queries** (to simplify routing)
+
+---
+
+## 🧭 **3️⃣ Sharding & Routing**
+
+Routing logic must **exactly match** the sharding logic.
+Otherwise, a query might hit the wrong shard.
+
+Example:
+
+* Sharding Logic: `hash(user_id) % N`
+* Routing Logic: must use the same `hash(user_id) % N`
+
+Mismatch → data inconsistencies or failed lookups.
+
+---
+
+## ⚙️ **Routing Algorithm: Key Characteristics**
+
+A good routing algorithm must be:
+
+| Property                  | Description                                                |
+| ------------------------- | ---------------------------------------------------------- |
+| **Fast**                  | Must quickly decide which node to use                      |
+| **Equal Distribution**    | Should spread requests evenly                              |
+| **Elastic**               | Adding/removing servers should not cause major reshuffling |
+| **Minimal Data Movement** | Data migration should be small                             |
+| **Deterministic**         | Same input → same server without coordination              |
+
+---
+
+# 🔁 **Round Robin Load Balancing**
+
+Round Robin is the **simplest** and most widely used load balancing strategy.
+
+---
+
+### **1️⃣ How It Works**
+
+* Requests are distributed **sequentially** across all servers.
+* Each new request goes to the **next server in the list**, looping back after the last.
+
+**Flow:**
+`A → B → C → A → B → C → ...`
+
+---
+
+### **2️⃣ Example**
 
 | Request | Server |
 | ------- | ------ |
@@ -92,154 +144,129 @@ Incoming requests: **R1, R2, R3, R4, R5, R6**
 
 ---
 
-## 3️⃣ Initial Distribution
+### **3️⃣ Variants**
 
-* When the load balancer starts, it maintains a **pointer to the next server**.
-* Requests are sent **in order**, ensuring **fair initial distribution**.
-
----
-
-## 4️⃣ Adding and Removing Servers
-
-**Adding a server:**
-
-* New server is appended to the rotation.
-* Subsequent requests are distributed including the new server.
-
-**Removing a server:**
-
-* Removed server is skipped in the rotation.
-* Requests continue to circulate among the remaining servers.
-
-**Note:** Round Robin does **not automatically redistribute existing sessions** or handle session affinity.
+* **Simple Round Robin:** Equal turn for all servers.
+* **Weighted Round Robin:** Assigns different weights based on server capacity.
+  Example: A(2x), B(1x) → sequence: A, A, B, A, A, B…
 
 ---
 
-## 5️⃣ Pros
+### **4️⃣ Adding & Removing Servers**
 
-* Simple and easy to implement
-* Fair distribution when servers are roughly equal in capacity
-* No special configuration required
-
----
-
-## 6️⃣ Cons
-
-* **Ignores server capacity** → can overload slow servers
-* **Does not account for current load** → may send requests to busy servers
-* **Not ideal for session persistence** → requires sticky sessions for stateful applications
+* When adding/removing servers, rotation order changes.
+* Does **not** preserve session affinity.
+* Existing clients may lose session continuity.
 
 ---
 
-## 7️⃣ When to Use Round Robin
+### **5️⃣ Pros**
 
-* Servers are **homogeneous** (similar hardware & processing capacity)
-* Requests are **stateless** or session state is stored externally
-* Simple, **low-maintenance load balancing** is sufficient
-* Traffic patterns are **relatively uniform**
-
----
-
-# Bucketing Load Balancing
-
-Bucketting (also called **consistent hashing**) is a strategy used to assign requests or users to servers using **hashing**. It’s widely used in distributed systems where **server churn** (adding/removing servers) occurs.
+✅ Simple, stateless, no metadata needed
+✅ Good for **homogeneous** servers
+✅ Works well for **stateless applications**
 
 ---
 
-## 1️⃣ How it works
+### **6️⃣ Cons**
 
-* Each server is assigned a **range of buckets** or **virtual nodes** on a hash ring.
-* Each request or user is **hashed** to a bucket → routed to the server responsible for that bucket.
-* Ensures **minimal redistribution** of keys when servers are added or removed.
-
----
-
-## 2️⃣ Example
-
-Servers: **A, B, C**
-
-Buckets (0-9):
-
-| Bucket | Server |
-| ------ | ------ |
-| 0-3    | A      |
-| 4-6    | B      |
-| 7-9    | C      |
-
-User `u1` → hash(u1) = 2 → Server A
-User `u2` → hash(u2) = 8 → Server C
+❌ Ignores server load or response time
+❌ No data-awareness
+❌ Not ideal for **session persistence** or **stateful workloads**
 
 ---
 
-## 3️⃣ Initial Distribution
+### **7️⃣ When to Use**
 
-* Assign each server to **one or more points** (buckets) on the hash ring.
-* Each request is mapped to a **bucket via a hash function** → routed to the assigned server.
-* Distribution depends on **hash function** and **number of virtual nodes per server**.
-
----
-
-## 4️⃣ Adding and Removing Servers
-
-**Adding a server:**
-
-* Only **buckets assigned to the new server** are redistributed.
-* Most existing requests/users continue to go to the **same server**, minimizing data movement.
-
-**Removing a server:**
-
-* Buckets of the removed server are **reassigned to remaining servers**.
-* Again, only **affected buckets** are remapped → minimal impact.
+* All servers have **similar capacity**
+* Applications are **stateless**
+* Need quick, simple balancing
+* Example: REST APIs, static content servers
 
 ---
 
-## 5️⃣ Pros
+# 🪣 **Bucketing (Modulo) Load Balancing**
 
-* **Scales well** with server churn
-* **Minimal remapping** → fewer cache misses or data migrations
-* Works well for **stateful workloads** (user sessions, sharded data)
-* Flexible with **virtual nodes** → better load distribution
+Bucketing (or Modulo-based hashing) uses a **hash function** to deterministically map each user/request to a specific server.
 
 ---
 
-## 6️⃣ Cons
+### **1️⃣ How It Works**
 
-* More **complex to implement** than Round Robin
-* Slightly **uneven distribution** if virtual nodes are not used properly
-* Hash function must be **consistent and stable**
+Each request is hashed → hash result is divided by total servers → server index chosen.
 
----
+```
+server_index = hash(key) % N
+```
 
-## 7️⃣ When to Use Bucketing
-
-* Servers **may frequently join or leave** (elastic systems)
-* Workloads are **stateful**, e.g., user sessions, sharded databases
-* Want **minimal movement of keys/data** on scaling events
-* Need **better fault tolerance** than Round Robin
+* All requests with same key go to same server.
+* Predictable and data-aware.
 
 ---
 
-# Mapping Table Load Balancing
+### **2️⃣ Example**
 
-A **Mapping Table** (or **explicit lookup table**) is a strategy where each **request, user, or key** is explicitly mapped to a **specific server**. Unlike Round Robin or Bucketing, the mapping is **stored in a table** and used for routing.
+| Server | Range |
+| ------ | ----- |
+| A      | 0–3   |
+| B      | 4–6   |
+| C      | 7–9   |
 
----
-
-## 1️⃣ How it works
-
-* Maintain a **table in memory** or a fast lookup system:
-
-  ```
-  User/Key → Server
-  ```
-* When a request comes in, the system **looks up the server** in the mapping table → forwards the request.
-* Provides **complete control** over which user/request goes to which server.
+User `u1` → hash(u1)=2 → A
+User `u2` → hash(u2)=8 → C
 
 ---
 
-## 2️⃣ Example
+### **3️⃣ Adding/Removing Servers**
 
-Mapping Table:
+* Adding/removing servers changes `N` → **all hashes shift!**
+* Results in **massive remapping** of keys.
+
+---
+
+### **4️⃣ Pros**
+
+✅ Fast and deterministic
+✅ Simple to implement
+✅ Data-aware (same key → same server)
+
+---
+
+### **5️⃣ Cons**
+
+❌ High data movement when servers change
+❌ Poor scalability
+❌ Requires rebalancing entire dataset
+
+---
+
+### **6️⃣ When to Use**
+
+* Cluster size rarely changes
+* Small or fixed number of servers
+* Systems where rehashing cost is acceptable
+
+---
+
+# 🗺️ **Mapping Table Load Balancing**
+
+A **Mapping Table** explicitly stores which **key/user** belongs to which **server**.
+
+---
+
+### **1️⃣ How It Works**
+
+A lookup table defines:
+
+```
+User/Key → Server
+```
+
+Every request performs a quick lookup.
+
+---
+
+### **2️⃣ Example**
 
 | User | Server |
 | ---- | ------ |
@@ -249,236 +276,187 @@ Mapping Table:
 | u4   | B      |
 | u5   | A      |
 
-* User `u1` → Server A
-* User `u4` → Server B
+---
+
+### **3️⃣ Advantages**
+
+✅ Complete control over mapping
+✅ No hash dependency
+✅ Perfect for **sticky sessions** and **custom routing**
 
 ---
 
-## 3️⃣ Initial Distribution
+### **4️⃣ Disadvantages**
 
-* Precompute the mapping based on **hashing, load, or business rules**.
-* Store mapping in **fast-access memory** (e.g., Redis, in-process hashmap).
-
----
-
-## 4️⃣ Adding and Removing Servers
-
-**Adding a server:**
-
-* Update the mapping table to **assign some keys/users** to the new server.
-* Other mappings **remain unchanged** → no remapping for unaffected users.
-
-**Removing a server:**
-
-* Update the mapping table to **reassign users/keys** of the removed server to remaining servers.
-* Requires careful update to avoid **orphaned users**.
+❌ High memory usage for large datasets
+❌ Operational overhead to maintain table
+❌ Single point of failure unless replicated
 
 ---
 
-## 5️⃣ Pros
+### **5️⃣ When to Use**
 
-* **Complete control** over user-to-server assignment
-* **Minimal redistribution** for scaling events
-* Very predictable, useful for **stateful workloads**
-* Works with **heterogeneous servers**
-
----
-
-## 6️⃣ Cons
-
-* Mapping table can **grow large** (memory overhead)
-* Updating table is **manual/operationally heavier**
-* Can become a **single point of failure** if not replicated
-* Not suitable for **rapidly changing or large user base**
+* Stateful workloads (sessions, chat systems, custom shards)
+* Fixed or small number of users
+* Custom or manual routing policies
 
 ---
 
-## 7️⃣ When to Use Mapping Table
+# 🌀 **Consistent Hashing**
 
-* Workloads are **stateful** and require **sticky routing** (user sessions, sharded data)
-* Need **fine-grained control** over which users go to which server
-* Number of users/keys is **manageable**
-* Minimal server churn, or when churn is controlled
+Consistent hashing solves the **scalability problem** of modulo hashing by minimizing key movement when servers are added or removed.
 
 ---
 
-# Consistent Hashing
+### **1️⃣ Hash Function**
 
-Consistent Hashing is a strategy used to distribute keys (or users) across multiple servers in a **scalable and resilient** way. Unlike Round Robin or Bucketing, it **minimizes data movement** when servers are added or removed.
+Maps keys and servers into a numeric space (e.g., 0 → 2³² − 1).
 
----
-
-## 1️⃣ Hash Function
-
-A hash function maps **keys or servers** to a numeric space (0 → max hash).
-
-### Good Hash Function
-
-* Uniformly distributes keys across the hash space.
-* Deterministic: same key always maps to the same hash.
-* Minimizes collisions.
-* Examples: MD5, SHA-1, MurmurHash.
+**Examples:**
+`hash("ServerA")`, `hash("User123")` using MD5, SHA-1, MurmurHash.
 
 ---
 
-## 2️⃣ Hash Ring
+### **2️⃣ Hash Ring**
 
-* Imagine the hash space **0 → MAX** as a **circle**.
-* Servers are placed on the **hash ring** using their hash values.
-* Keys are also hashed and placed on the ring.
-
-**Assignment Rule:**
-
-* A key belongs to the **first server clockwise** from its position on the ring.
+* Imagine the numeric space as a **circular ring**.
+* Both **servers** and **keys** are hashed and placed on this ring.
+* A key belongs to the **first server clockwise** from its hash position.
 
 ---
 
-## 3️⃣ Consistent Hashing Algorithm
+### **3️⃣ Example**
 
-1. Hash each server → place on ring.
-2. Hash each key → find the nearest server clockwise.
-3. Assign key to that server.
-
-**Virtual Nodes:**
-
-* Each server can have **multiple virtual nodes** on the ring.
-* Helps in **better load balancing** when server capacities differ.
-
----
-
-## 4️⃣ Example
-
-Hash ring (0 → 100):
-
-```
-Server A → 10
-Server B → 50
-Server C → 80
-```
+| Entity   | Hash Position |
+| -------- | ------------- |
+| Server A | 10            |
+| Server B | 50            |
+| Server C | 80            |
 
 Keys:
 
-* Key k1 → hash 15 → Server B
-* Key k2 → hash 75 → Server C
-* Key k3 → hash 5  → Server A
+* Key k1 (15) → Server B
+* Key k2 (75) → Server C
+* Key k3 (5) → Server A
 
 ---
 
-## 5️⃣ Initial Distribution
+### **4️⃣ Virtual Nodes**
 
-* Place all servers on the ring using their hashes.
-* Map keys to servers using the clockwise rule.
-* Virtual nodes can be added for **smoother distribution**.
+Each physical server can have multiple **virtual nodes (vnodes)** to achieve smoother load distribution.
 
----
-
-## 6️⃣ Adding and Removing Servers
-
-**Adding a server:**
-
-* Place the new server on the ring.
-* Only the keys **between the new server and its predecessor** need to move.
-* Most keys remain unaffected → minimal redistribution.
-
-**Removing a server:**
-
-* Keys assigned to the removed server are **reassigned to its successor** on the ring.
-* Again, most keys remain unaffected.
+Example:
+Server A → hash(A1), hash(A2), hash(A3) …
+Spreads load evenly across ring.
 
 ---
 
-## 7️⃣ Pros
+### **5️⃣ Adding/Removing Servers**
 
-* Minimal data movement on server changes.
-* Scales well for large numbers of servers/keys.
-* Naturally balances load with virtual nodes.
-* Supports **heterogeneous server capacities**.
+**Adding:**
 
----
+* Insert new server on ring.
+* Only keys between the new server and its predecessor move.
 
-## 8️⃣ Cons
+**Removing:**
 
-* Slightly more complex to implement than Round Robin or Bucketing.
-* Requires **good hash function** to prevent hotspots.
-* Needs **virtual nodes** for small clusters to avoid imbalance.
+* Keys on removed server move to its successor.
 
----
-
-## 9️⃣ When to Use Consistent Hashing
-
-* Large-scale, distributed, or sharded databases.
-* Systems with **frequent server additions/removals**.
-* Load balancing for **cache systems** (Redis, Memcached).
-* Eventual consistency systems with **replication across nodes**.
+✅ Minimal reshuffling
+✅ Great for dynamic clusters
 
 ---
 
+### **6️⃣ Pros**
 
-## Comparison Table
-
-| Algorithm          | Load Distribution         | Data Awareness   | Adding/Removing Servers | Complexity | Use Case                            |
-| ------------------ | ------------------------- | ---------------- | ----------------------- | ---------- | ----------------------------------- |
-| Round Robin        | Even (if uniform)         | ❌ Not data-aware | ❌ Reshuffles            | Simple     | Stateless servers, web servers      |
-| Bucketing / Modulo | Deterministic             | ✅ Data-aware     | ❌ Reshuffles all keys   | Simple     | Small clusters, fixed servers       |
-| Mapping Table      | Deterministic             | ✅ Exact          | ❌ Update table          | Medium     | Hot keys, fixed ranges              |
-| Consistent Hashing | Even (with virtual nodes) | ✅ Data-aware     | ✅ Minimal reshuffling   | Medium     | Large-scale clusters, NoSQL, caches |
+✅ Scales dynamically with minimal key movement
+✅ Data-aware and deterministic
+✅ Supports virtual nodes for fairness
+✅ Perfect for caches, databases, and message systems
 
 ---
 
-### 🔹 Key Takeaways
+### **7️⃣ Cons**
 
-1. **Round Robin** → Good for stateless servers, bad for data-aware routing
-2. **Modulo / Bucketing** → Simple and deterministic, but doesn’t handle cluster changes well
-3. **Mapping Table** → Precise, but high management overhead
-4. **Consistent Hashing** → Best for scalable, dynamic clusters with minimal remapping
-
----
-
-
-
-# Stateless Servers
-
-Stateless servers are servers that **do not maintain any session or client-specific data** between requests. Each request is **independent** and contains all the information needed to process it.
+❌ Slightly higher implementation complexity
+❌ Needs a good hash function
+❌ Slight imbalance in small clusters without vnodes
 
 ---
 
-## 1️⃣ Characteristics
+### **8️⃣ Used In**
 
-* No client-specific state is stored on the server.
-* All requests are **self-contained** (e.g., include authentication tokens, user info).
-* Servers can be **added or removed** without affecting user sessions.
-* Ideal for **horizontal scaling**.
+* **Cassandra**, **DynamoDB**, **Redis Cluster**, **Kafka**, **Memcached**, **Elasticsearch**
 
 ---
 
-## 2️⃣ Example
+# 🧮 **Comparison Table**
 
-* REST APIs: each HTTP request carries authentication tokens and payload.
-* Microservices: services process each request without relying on server memory.
-
----
-
-## 3️⃣ Pros
-
-* **Easy to scale horizontally**: add more servers without worrying about session replication.
-* **High availability**: if a server crashes, another server can handle requests immediately.
-* Simplifies **load balancing**: any server can handle any request.
-* Reduces **memory overhead** on servers.
+| Algorithm              | Data-Aware | Key Movement on Node Change | Complexity | Ideal For                          |
+| ---------------------- | ---------- | --------------------------- | ---------- | ---------------------------------- |
+| **Round Robin**        | ❌          | N/A                         | Simple     | Stateless web servers              |
+| **Modulo / Bucketing** | ✅          | High (reshuffle all)        | Simple     | Small static clusters              |
+| **Mapping Table**      | ✅          | Manual (low)                | Medium     | Sticky sessions, custom routing    |
+| **Consistent Hashing** | ✅          | Minimal                     | Medium     | Large, dynamic distributed systems |
 
 ---
 
-## 4️⃣ Cons
+# ⚙️ **Stateless Servers**
 
-* All client-specific state must be stored **externally** (e.g., database, cache, distributed session store).
-* Some requests may require **more data to be sent** in each request (tokens, metadata).
+A **stateless server** doesn’t store client-specific state between requests.
+Each request is self-contained — it carries all data required for processing.
 
 ---
 
-## 5️⃣ When to Use Stateless Servers
+### **1️⃣ Characteristics**
 
-* Systems with **high traffic and need for horizontal scaling**.
-* APIs and microservices architectures.
-* Load-balanced web servers.
-* Cloud-native applications where servers can be **ephemeral**.
+* No session data in memory
+* Requests contain authentication or context
+* Servers can be freely added/removed
+* Perfect for autoscaling environments
+
+---
+
+### **2️⃣ Examples**
+
+* REST APIs (each request has JWT token)
+* Microservices that query state from DB/cache instead of local memory
+
+---
+
+### **3️⃣ Pros**
+
+✅ Easy horizontal scaling
+✅ No session replication needed
+✅ High availability and fault tolerance
+✅ Simplifies load balancing (any node can serve any request)
+
+---
+
+### **4️⃣ Cons**
+
+❌ State must live externally (DB, cache, session store)
+❌ Slightly more network overhead (token verification, extra lookups)
+
+---
+
+### **5️⃣ When to Use**
+
+* High-traffic systems (web APIs, cloud apps)
+* Stateless microservices
+* Auto-scaled server fleets
+* Event-driven or ephemeral environments (e.g., AWS Lambda)
+
+---
+
+# 🧠 **Final Summary**
+
+| Concept                | Purpose                       | Best Use Case                   |
+| ---------------------- | ----------------------------- | ------------------------------- |
+| **Round Robin**        | Simple even distribution      | Stateless workloads             |
+| **Bucketing / Modulo** | Deterministic mapping         | Fixed cluster                   |
+| **Mapping Table**      | Explicit control              | Sticky sessions, small clusters |
+| **Consistent Hashing** | Scalable, minimal remap       | Caches, DBs, dynamic clusters   |
+| **Stateless Servers**  | Scalability & fault tolerance | APIs, microservices             |
 
 ---
