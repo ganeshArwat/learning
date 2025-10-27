@@ -7,6 +7,7 @@
   * [AWS Availability Zones (AZs)](01_getting_started_with_aws.md#-aws-availability-zones-azs)
 * [Tour of the AWS Console](01_getting_started_with_aws.md#-tour-of-the-aws-console)
 
+---
 
 ## **Chapter 2: IAM (Identity and Access Management)**  
 
@@ -23,6 +24,8 @@
 * [Shared Responsibility Model (IAM)](02_IAM_Identity_Access_Management.md#1️⃣1️⃣-shared-responsibility-model-iam)  
 * [IAM Summary](02_IAM_Identity_Access_Management.md#1️⃣2️⃣-iam-summary)  
 * [Extra Tips / Real-world Examples](02_IAM_Identity_Access_Management.md#extra-tips--real-world-examples)
+
+---
 
 ## Chapter 3 – Elastic Compute Cloud (EC2)
 
@@ -57,6 +60,7 @@
   * [Example Price Comparison](03_Ec2.md#-example-price-comparison-m4large--us-east-1)
   * [In Short — Choosing Strategy](03_Ec2.md#-in-short--choosing-strategy)
 
+---
 
 ## Chapter 4 – Amazon EC2: Instance Storage
 
@@ -71,3 +75,56 @@
 * [EBS Multi-Attach (io1/io2 only)](04_Ec2_Instance_Storage.md#-4%EF%B8%8F%E2%83%A3-ebs-multi-attach-io1--io2-only)
 * [Amazon EFS – Elastic File System](04_Ec2_Instance_Storage.md#-5%EF%B8%8F%E2%83%A3-amazon-efs--elastic-file-system)
 * [EBS vs EFS – Key Differences](04_Ec2_Instance_Storage.md#-6%EF%B8%8F%E2%83%A3-ebs-vs-efs--key-differences)
+
+---
+
+# 🧭 Chapter 5 – Availability and Scalability (Index)
+
+1. [Concept Overview](#-concept-overview)
+2. [Scalability & High Availability](#scalability--high-availability)
+
+   * [Vertical Scalability](#-vertical-scalability)
+   * [Horizontal Scalability](#horizontal-scalability)
+   * [High Availability (HA)](#high-availability-ha)
+   * [HA & Scalability for EC2](#high-availability--scalability-for-ec2)
+3. [Load Balancing](#what-is-load-balancing)
+
+   * [Why Use a Load Balancer](#why-use-a-load-balancer)
+   * [Elastic Load Balancer (ELB)](#why-use-an-elastic-load-balancer-elb)
+   * [Health Checks](#health-checks)
+   * [Types of Load Balancer](#types-of-load-balancer-on-aws)
+   * [Load Balancer Security Groups](#load-balancer-security-groups)
+   * [Classic Load Balancer (CLB)](#classic-load-balancer-clb)
+   * [Application Load Balancer (ALB)](#application-load-balancer-alb)
+
+     * [Target Groups](#target-groups)
+     * [Traffic Flow](#http-based-traffic-flow)
+   * [Network Load Balancer (NLB)](#network-load-balancer-nlb)
+   * [Gateway Load Balancer (GWLB)](#gateway-load-balancer-gwlb)
+   * [Quick Summary](#quick-summary-)
+4. [Sticky Sessions (Session Affinity)](#-sticky-sessions-session-affinity)
+
+   * [Cookie Names](#-sticky-sessions--cookie-names)
+5. [Cross-Zone Load Balancing](#-cross-zone-load-balancing)
+6. [SSL/TLS Basics](#-ssltls-basics)
+
+   * [Load Balancer SSL Certificates](#-load-balancer-ssl-certificates)
+   * [Server Name Indication (SNI)](#-server-name-indication-sni)
+   * [ELB SSL Certificate Comparison](#-elastic-load-balancers--ssl-certificate-comparison)
+7. [Connection Draining / Deregistration Delay](#-connection-draining-deregistration-delay)
+8. [Auto Scaling Group (ASG)](#-whats-an-auto-scaling-group-asg)
+
+   * [ASG Diagram](#-auto-scaling-group--basic-diagram)
+   * [ASG with Load Balancer](#-auto-scaling-group-with-load-balancer)
+   * [ASG Attributes](#-asg-attributes)
+   * [Auto Scaling with CloudWatch](#-auto-scaling-with-cloudwatch-alarms)
+   * [Scaling Policies](#-scaling-policies)
+
+     * [Dynamic Scaling](#1-dynamic-scaling)
+     * [Scheduled Scaling](#2-scheduled-scaling)
+     * [Predictive Scaling](#3-predictive-scaling)
+   * [Good Metrics to Scale On](#-good-metrics-to-scale-on)
+   * [Scaling Cooldowns](#-scaling-cooldowns)
+   * [Instance Refresh](#-instance-refresh)
+
+---
