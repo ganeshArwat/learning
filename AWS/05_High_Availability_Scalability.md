@@ -351,20 +351,21 @@ Works with:
 2. The client sends that cookie in each request.
 3. The load balancer uses the cookie to route requests to the same instance.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant ELB
-    participant EC2A
-    participant EC2B
-
-    User->>ELB: Initial Request
-    ELB->>EC2A: Send to Instance A
-    EC2A-->>ELB: Response + Cookie
-    ELB-->>User: Response (Set-Cookie)
-    User->>ELB: Next Request (with Cookie)
-    ELB->>EC2A: Forward again to Instance A
 ```
+User                ELB                 EC2A                EC2B
+ |                   |                   |                   |
+ |----Request-------->|                   |                   |
+ |                    |---Forward-------->|                   |
+ |                    |<--Response+Cookie-|                   |
+ |<---Response(Set-Cookie)----------------|                   |
+ |                   |                   |                   |
+ |----Next Request(with Cookie)---------->|                   |
+ |                    |---Forward-------->|                   |
+ |                    |<--Response--------|                   |
+ |<---Response----------------------------|                   |
+ |                   |                   |                   |
+```
+
 
 ---
 
@@ -398,14 +399,23 @@ With **Cross-Zone Load Balancing**, each load balancer node **routes traffic eve
 
 Without it, requests are distributed **only within the same AZ** as the load balancer node — which can lead to imbalance.
 
-```mermaid
-graph TD
-    A[Client Requests] --> B[ALB Node (AZ1)]
-    A --> C[ALB Node (AZ2)]
-    B --> D[EC2 in AZ1]
-    B --> E[EC2 in AZ2]
-    C --> D
-    C --> E
+
+```
+                 ┌────────────────────────────────┐
+                 │          Client Requests        │
+                 └────────────────────────────────┘
+                               │
+              ┌────────────────┴────────────────┐
+              │                                 │
+ ┌──────────────────────────┐       ┌──────────────────────────┐
+ │     ALB Node (AZ1)       │       │     ALB Node (AZ2)       │
+ └──────────────────────────┘       └──────────────────────────┘
+              │                                 │
+       ┌──────┴────────────┬──────────────┐─────┴──────────────┐
+       │                   │              │                    │
+┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+│ EC2 in AZ1   │   │ EC2 in AZ2   │   │ EC2 in AZ1   │   │ EC2 in AZ2   │
+└──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘
 ```
 
 | Load Balancer Type | Default    | Cross-Zone LB                | Inter-AZ Data Cost |
@@ -443,14 +453,26 @@ Managed via **AWS Certificate Manager (ACM)** or uploaded manually.
 * Clients use **SNI (Server Name Indication)** to identify the hostname.
 * Choose a **security policy** (e.g., TLS 1.2 only).
 
-```mermaid
-graph TD
-    A[Client Request https://site1.com] --> B[ALB Listener 443]
-    B --> C[Cert1 - site1.com]
-    A2[Client Request https://site2.com] --> B
-    B --> D[Cert2 - site2.com]
 ```
-
+                  ┌────────────────────────────────────┐
+                  │            Clients                 │
+                  └────────────────────────────────────┘
+                           │                 │
+                           │                 │
+           https://site1.com│                 │https://site2.com
+                           ▼                 ▼
+                    ┌────────────────────────────┐
+                    │     ALB Listener : 443     │
+                    └────────────────────────────┘
+                           │                 │
+                           │                 │
+                ┌──────────┘                 └──────────┐
+                ▼                                       ▼
+     ┌────────────────────────┐           ┌────────────────────────┐
+     │ Cert1 — site1.com      │           │ Cert2 — site2.com      │
+     │ (HTTPS termination)    │           │ (HTTPS termination)    │
+     └────────────────────────┘           └────────────────────────┘
+```
 ---
 
 ## 🌍 Server Name Indication (SNI) {#sni}
@@ -489,16 +511,18 @@ When an instance is being removed or marked unhealthy, **Connection Draining** e
 
 > 🔧 Set to **lower values** (e.g., 60s) for short requests, or **higher** for long-running APIs.
 
-```mermaid
-sequenceDiagram
-    participant LB as Load Balancer
-    participant EC2 as Instance
-
-    LB->>EC2: Ongoing requests
-    Note right of EC2: Instance marked unhealthy
-    LB-->>EC2: Stop sending new requests
-    EC2-->>LB: Finish active requests
-    LB-->>EC2: Deregister instance
+```
+Load Balancer                     EC2 Instance
+      |                                 |
+      |------ Ongoing Requests -------->| 
+      |                                 |
+      |         [Instance becomes unhealthy] 
+      |                                 |
+      |<----- Stop sending new requests  |
+      |------ Wait for active requests -->|
+      |<----- Active requests complete ---|
+      |------ Deregister instance -------->|
+      |                                 |
 ```
 
 ---
