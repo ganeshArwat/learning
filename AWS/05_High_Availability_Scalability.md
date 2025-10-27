@@ -402,13 +402,12 @@ Without it, requests are distributed **only within the same AZ** as the load bal
 
 ```mermaid
 graph TD
-    A[Client Requests] --> B[ALB Node (AZ1)]
-    A --> C[ALB Node (AZ2)]
-    B --> D[EC2 in AZ1]
-    B --> E[EC2 in AZ2]
+    A["Client Requests"] --> B["ALB Node (AZ1)"]
+    A --> C["ALB Node (AZ2)"]
+    B --> D["EC2 in AZ1"]
+    B --> E["EC2 in AZ2"]
     C --> D
     C --> E
-
 ```
 
 | Load Balancer Type | Default    | Cross-Zone LB                | Inter-AZ Data Cost |
