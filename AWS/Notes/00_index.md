@@ -58,3 +58,16 @@
   * [In Short — Choosing Strategy](03_Ec2.md#-in-short--choosing-strategy)
 
 
+## Chapter 4 – Amazon EC2: Instance Storage
+
+* [What’s an EBS Volume?](04_Ec2_Instance_Storage.md#-whats-an-ebs-volume)
+* [EBS Volume Details](04_Ec2_Instance_Storage.md#-ebs-volume-details)
+* [EBS – Delete on Termination Attribute](04_Ec2_Instance_Storage.md#-ebs--delete-on-termination-attribute)
+* [EBS Snapshots](04_Ec2_Instance_Storage.md#-ebs-snapshots)
+* [EBS Snapshot Features](04_Ec2_Instance_Storage.md#-ebs-snapshot-features)
+* [AMI Overview](04_Ec2_Instance_Storage.md#-1%EF%B8%8F%E2%83%A3-ami-overview)
+* [EC2 Instance Store](04_Ec2_Instance_Storage.md#-2%EF%B8%8F%E2%83%A3-ec2-instance-store)
+* [EBS Volume Types](04_Ec2_Instance_Storage.md#-3%EF%B8%8F%E2%83%A3-ebs-volume-types)
+* [EBS Multi-Attach (io1/io2 only)](04_Ec2_Instance_Storage.md#-4%EF%B8%8F%E2%83%A3-ebs-multi-attach-io1--io2-only)
+* [Amazon EFS – Elastic File System](04_Ec2_Instance_Storage.md#-5%EF%B8%8F%E2%83%A3-amazon-efs--elastic-file-system)
+* [EBS vs EFS – Key Differences](04_Ec2_Instance_Storage.md#-6%EF%B8%8F%E2%83%A3-ebs-vs-efs--key-differences)
