@@ -64,7 +64,6 @@ graph TD
 
     A[Application Server] -->|SQL Query| B
     A -->|SSH Access| C
-
 ```
 
 ---
