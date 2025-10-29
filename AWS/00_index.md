@@ -128,3 +128,37 @@
    * [Instance Refresh](05_High_Availability_Scalability.md#-instance-refresh)
 
 ---
+
+## 🗄️ Chapter 6 – Amazon RDS, Aurora & ElastiCache
+
+* [Amazon RDS Overview](06_RDS_Aurora_and_ElastiCache.md#-amazon-rds-overview)
+* [RDS vs EC2 Database Hosting](06_RDS_Aurora_and_ElastiCache.md#-rds-vs-ec2-database-hosting)
+
+  * [RDS Features](06_RDS_Aurora_and_ElastiCache.md#-rds-features)
+  * [EC2 with Self-Managed Database](06_RDS_Aurora_and_ElastiCache.md#-ec2-with-self-managed-database)
+  * [RDS vs EC2 – Architectural Comparison](06_RDS_Aurora_and_ElastiCache.md#-rds-vs-ec2--architectural-comparison)
+* [RDS High Availability and Read Scaling](06_RDS_Aurora_and_ElastiCache.md#-rds-high-availability-and-read-scaling)
+
+  * [RDS Multi-AZ Deployment](06_RDS_Aurora_and_ElastiCache.md#-rds-multi-az-deployment)
+  * [RDS Read Replicas](06_RDS_Aurora_and_ElastiCache.md#-rds-read-replicas)
+* [Amazon Aurora](06_RDS_Aurora_and_ElastiCache.md#-amazon-aurora)
+
+  * [Aurora High Availability and Read Scaling](06_RDS_Aurora_and_ElastiCache.md#-aurora-high-availability-and-read-scaling)
+  * [Aurora DB Cluster Architecture](06_RDS_Aurora_and_ElastiCache.md#-aurora-db-cluster-architecture)
+  * [Aurora Features](06_RDS_Aurora_and_ElastiCache.md#-features-of-aurora)
+* [RDS & Aurora Security](06_RDS_Aurora_and_ElastiCache.md#-rds--aurora-security)
+* [Amazon RDS Proxy](06_RDS_Aurora_and_ElastiCache.md#-amazon-rds-proxy)
+* [Amazon ElastiCache Overview](06_RDS_Aurora_and_ElastiCache.md#-amazon-elasticache-overview)
+
+  * [ElastiCache – DB Cache Architecture](06_RDS_Aurora_and_ElastiCache.md#-elasticache-solution-architecture---db-cache)
+  * [ElastiCache – User Session Store](06_RDS_Aurora_and_ElastiCache.md#-elasticache-solution-architecture--user-session-store)
+  * [Redis vs Memcached](06_RDS_Aurora_and_ElastiCache.md#-elasticache--redis-vs-memcached)
+* [Caching Implementation Patterns](06_RDS_Aurora_and_ElastiCache.md#-caching-implementation-considerations)
+
+  * [Lazy Loading / Cache-Aside](06_RDS_Aurora_and_ElastiCache.md#-lazy-loading--cache-aside--lazy-population)
+  * [Write-Through Pattern](06_RDS_Aurora_and_ElastiCache.md#️-7-write-through-pattern)
+  * [Cache Evictions & TTL](06_RDS_Aurora_and_ElastiCache.md#-cache-evictions-and-time-to-live-ttl)
+* [Amazon MemoryDB for Redis](06_RDS_Aurora_and_ElastiCache.md#-amazon-memorydb-for-redis)
+* [Final Words of Wisdom](06_RDS_Aurora_and_ElastiCache.md#-final-words-of-wisdom)
+
+---

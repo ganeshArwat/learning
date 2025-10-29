@@ -1,6 +1,3 @@
-Here’s an **enhanced, structured version** of your notes on **Amazon RDS, Aurora, & ElastiCache**, with **clear sections**, **extra explanations**, and **Mermaid diagrams** to visualize key concepts.
-
----
 
 # ☁️ RDS, Aurora, & ElastiCache
 
