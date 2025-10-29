@@ -44,9 +44,8 @@ Here’s an **enhanced, structured version** of your notes on **Amazon RDS, Auro
 
 ```mermaid
 graph TD
-    A[Application Server] -->|SQL Query| B[RDS Instance (Managed by AWS)]
-    A -->|SSH Access| C[EC2 with Self-Managed DB]
     subgraph RDS
+        B[RDS Instance (Managed by AWS)]
         B1[Auto Backups]
         B2[Monitoring]
         B3[Multi-AZ]
@@ -54,12 +53,18 @@ graph TD
         B --> B2
         B --> B3
     end
+
     subgraph EC2
+        C[EC2 with Self-Managed DB]
         C1[Manual Backups]
         C2[Manual Failover]
         C --> C1
         C --> C2
     end
+
+    A[Application Server] -->|SQL Query| B
+    A -->|SSH Access| C
+
 ```
 
 ---
