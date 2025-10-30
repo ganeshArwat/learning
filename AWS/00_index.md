@@ -162,3 +162,53 @@
 * [Final Words of Wisdom](06_RDS_Aurora_and_ElastiCache.md#-final-words-of-wisdom)
 
 ---
+
+## 🧭 Chapter 7 – Amazon Route 53
+
+* [What is DNS?](07_Amazon_Route_53.md#-what-is-dns)
+
+  * [Hierarchical Naming Structure](07_Amazon_Route_53.md#-hierarchical-naming-structure)
+* [DNS Terminologies](07_Amazon_Route_53.md#-dns-terminologies)
+* [How DNS Works](07_Amazon_Route_53.md#-how-dns-works)
+* [Amazon Route 53 Overview](07_Amazon_Route_53.md#-amazon-route-53-overview)
+* [DNS Record Structure](07_Amazon_Route_53.md#-dns-record-structure)
+* [Must-Know DNS Records](07_Amazon_Route_53.md#-must-know-dns-records)
+* [Advanced DNS Records](07_Amazon_Route_53.md#-advanced-dns-records)
+* [Hosted Zones in Route 53](07_Amazon_Route_53.md#-hosted-zones-in-route-53)
+
+  * [Public vs Private Hosted Zone Diagram](07_Amazon_Route_53.md#diagram-public-vs-private-hosted-zone)
+* [TTL (Time To Live)](07_Amazon_Route_53.md#️-route-53--ttl-time-to-live)
+
+  * [TTL Impacts](07_Amazon_Route_53.md#-ttl-impacts)
+* [CNAME vs Alias](07_Amazon_Route_53.md#-cname-vs-alias)
+
+  * [Alias Record Targets](07_Amazon_Route_53.md#-alias-record-targets)
+  * [Alias vs CNAME Visual](07_Amazon_Route_53.md#-visual-alias-vs-cname)
+* [Summary Diagram](07_Amazon_Route_53.md#-summary-diagram)
+* [Routing Policies & Health Checks](07_Amazon_Route_53.md#-amazon-route-53--routing-policies--health-checks)
+
+  * [Supported Routing Policies](07_Amazon_Route_53.md#-supported-routing-policies)
+  * [Routing Policy Highlights](07_Amazon_Route_53.md#-routing-policy-highlights)
+
+    * [Simple](07_Amazon_Route_53.md#-simple)
+    * [Weighted](07_Amazon_Route_53.md#-weighted)
+    * [Latency-based](07_Amazon_Route_53.md#-latency-based)
+    * [Failover](07_Amazon_Route_53.md#-failover)
+    * [Geolocation](07_Amazon_Route_53.md#-geolocation)
+    * [Geoproximity](07_Amazon_Route_53.md#-geoproximity-via-traffic-flow)
+    * [IP-based](07_Amazon_Route_53.md#-ip-based)
+    * [Multi-Value Answer](07_Amazon_Route_53.md#-multi-value-answer)
+  * [Health Checks](07_Amazon_Route_53.md#️-health-checks)
+
+    * [What They Do](07_Amazon_Route_53.md#-what-they-do)
+    * [Types](07_Amazon_Route_53.md#-types)
+    * [Endpoint Details](07_Amazon_Route_53.md#-endpoint-details)
+    * [Calculated Health Checks](07_Amazon_Route_53.md#-calculated-health-checks)
+    * [Private Resources](07_Amazon_Route_53.md#-private-resources)
+* [Traffic Flow](07_Amazon_Route_53.md#-traffic-flow)
+* [Domain Registrar vs DNS Service](07_Amazon_Route_53.md#-domain-registrar-vs-dns-service)
+
+  * [Connecting Registrar & Route 53](07_Amazon_Route_53.md#-steps-to-connect)
+* [Example: DNS Flow](07_Amazon_Route_53.md#-example-dns-flow)
+
+---
