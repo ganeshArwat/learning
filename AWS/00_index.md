@@ -212,3 +212,71 @@
 * [Example: DNS Flow](07_Amazon_Route_53.md#-example-dns-flow)
 
 ---
+
+## 🏗️ Chapter 8 – Amazon VPC (Virtual Private Cloud)
+
+* [VPC Introduction](08_VPC_virtual_private_cloud.md#-vpc-introduction)
+* [VPC & Subnets Primer](08_VPC_virtual_private_cloud.md#-vpc--subnets-primer)
+* [VPC Diagram (Conceptual)](08_VPC_virtual_private_cloud.md#-vpc-diagram-conceptual)
+* [Internet Gateway (IGW) & NAT Gateways](08_VPC_virtual_private_cloud.md#-internet-gateway-igw--nat-gateways)
+
+  * [Internet Gateway](08_VPC_virtual_private_cloud.md#-internet-gateway)
+  * [NAT Gateway / NAT Instance](08_VPC_virtual_private_cloud.md#-nat-gateway--nat-instance)
+* [Network ACLs (NACL) & Security Groups](08_VPC_virtual_private_cloud.md#-network-acls-nacl--security-groups)
+
+  * [Example & Tips](08_VPC_virtual_private_cloud.md#-example)
+* [VPC Flow Logs](08_VPC_virtual_private_cloud.md#-vpc-flow-logs)
+* [VPC Peering](08_VPC_virtual_private_cloud.md#-vpc-peering)
+* [VPC Endpoints](08_VPC_virtual_private_cloud.md#-vpc-endpoints)
+
+  * [Gateway Endpoint](08_VPC_virtual_private_cloud.md#-gateway-endpoint)
+  * [Interface Endpoint](08_VPC_virtual_private_cloud.md#-interface-endpoint)
+* [Site-to-Site VPN & Direct Connect](08_VPC_virtual_private_cloud.md#-site-to-site-vpn--direct-connect)
+* [VPC Summary (Cheat Sheet)](08_VPC_virtual_private_cloud.md#-vpc-summary-cheat-sheet)
+* [Typical 3-Tier Architecture (VPC)](08_VPC_virtual_private_cloud.md#-typical-3-tier-architecture-vpc)
+* [LAMP Stack on AWS EC2](08_VPC_virtual_private_cloud.md#-lamp-stack-on-aws-ec2)
+* [WordPress on AWS – Basic Architecture](08_VPC_virtual_private_cloud.md#-wordpress-on-aws--basic-architecture)
+* [WordPress on AWS – Scalable Architecture](08_VPC_virtual_private_cloud.md#-wordpress-on-aws--scalable-architecture)
+* [Example: 3-Tier VPC Architecture](08_VPC_virtual_private_cloud.md#-example-3-tier-vpc-architecture)
+* [Explanation of 3-Tier Design](08_VPC_virtual_private_cloud.md#-explanation)
+
+---
+
+## ☁️ Chapter 9 – Amazon S3 (Simple Storage Service)
+
+* [Introduction](09_S3_Simple_Storage_Service.md#-introduction)
+* [Common Use Cases](09_S3_Simple_Storage_Service.md#-common-use-cases)
+* [Amazon S3 Buckets](09_S3_Simple_Storage_Service.md#-amazon-s3-buckets)
+
+  * [Bucket Naming Rules](09_S3_Simple_Storage_Service.md#-bucket-naming-rules)
+* [Amazon S3 Objects](09_S3_Simple_Storage_Service.md#-amazon-s3-objects)
+
+  * [Object Keys (Paths)](09_S3_Simple_Storage_Service.md#-object-keys-paths)
+  * [Object Details](09_S3_Simple_Storage_Service.md#-object-details)
+  * [Multi-Part Upload](09_S3_Simple_Storage_Service.md#-multi-part-upload-for-large-files)
+  * [Visual Overview – How S3 Organizes Data](09_S3_Simple_Storage_Service.md#-visual-overview--how-s3-organizes-data)
+* [Amazon S3 Security](09_S3_Simple_Storage_Service.md#-amazon-s3--security)
+
+  * [Access Control Overview](09_S3_Simple_Storage_Service.md#-1-access-control-overview)
+  * [IAM Policy (User-Based)](09_S3_Simple_Storage_Service.md#-iam-policy-user-based)
+  * [Bucket Policy (Resource-Based)](09_S3_Simple_Storage_Service.md#-bucket-policy-resource-based)
+  * [Access Control Lists (ACLs)](09_S3_Simple_Storage_Service.md#-access-control-lists-acls)
+  * [Access Evaluation Logic](09_S3_Simple_Storage_Service.md#-access-evaluation-logic)
+  * [Encryption in S3](09_S3_Simple_Storage_Service.md#-encryption-in-s3)
+  * [Bucket Policy Structure](09_S3_Simple_Storage_Service.md#-2-bucket-policy-structure)
+  * [Common Access Scenarios](09_S3_Simple_Storage_Service.md#-3-common-access-scenarios-with-diagrams)
+  * [Block Public Access (BPA)](09_S3_Simple_Storage_Service.md#-4-block-public-access-bpa)
+  * [Security Best Practices](09_S3_Simple_Storage_Service.md#-security-best-practices)
+* [Static Website Hosting](09_S3_Simple_Storage_Service.md#-static-website-hosting)
+* [Versioning](09_S3_Simple_Storage_Service.md#-versioning)
+* [Replication (CRR & SRR)](09_S3_Simple_Storage_Service.md#-replication-crr--srr)
+* [Storage Classes Overview](09_S3_Simple_Storage_Service.md#-storage-classes-overview)
+
+  * [S3 Durability and Availability](09_S3_Simple_Storage_Service.md#-s3-durability-and-availability)
+  * [S3 Standard – General Purpose](09_S3_Simple_Storage_Service.md#-s3-standard--general-purpose)
+  * [Infrequent Access (IA) Classes](09_S3_Simple_Storage_Service.md#-infrequent-access-ia-classes)
+  * [Glacier Family (Archival Storage)](09_S3_Simple_Storage_Service.md#-glacier-family-archival-storage)
+  * [Intelligent-Tiering](09_S3_Simple_Storage_Service.md#-intelligent-tiering)
+  * [S3 Storage Class Comparison](09_S3_Simple_Storage_Service.md#-s3-storage-class-comparison)
+
+---
