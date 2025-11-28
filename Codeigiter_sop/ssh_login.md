@@ -1,129 +1,117 @@
+# **SOP: Configure SSH Key-Based Authentication (Windows → Linux Server)**
 
-# 🧰 **SOP: Setup PuTTY for Passwordless SSH Login**
+### **Purpose**
 
-## 🔹 Objective
-
-Configure PuTTY to connect to a remote Linux server **without typing the password** every time by using an **SSH key pair**.
-
----
-
-## 🔹 Requirements
-
-✅ Windows system with **PuTTY** and **PuTTYgen** installed
-✅ SSH access (username & password available at least once)
-✅ Remote Linux server running **SSH service**
+To set up secure password-less SSH login from a Windows system to a Linux server using an **ED25519** SSH key.
 
 ---
 
-## 🔹 Step 1: Generate SSH Key Pair using PuTTYgen
+# **Step-by-Step Procedure**
 
-1. Open **PuTTYgen** (installed with PuTTY).
-2. Under **“Parameters”**, select:
+## **1. Generate SSH Key on Windows**
 
-   * Type of key to generate → **RSA**
-   * Number of bits → **2048** (or 4096 for stronger security).
-3. Click **Generate** and **move your mouse** around the blank area to generate randomness.
-4. Once done, you’ll see a **Public Key** displayed.
+1. Open **Windows Terminal / PowerShell**.
+2. Run the following command to generate an ED25519 SSH key:
 
----
+```sh
+ssh-keygen -t ed25519 -C "ganeshITD"
+```
 
-## 🔹 Step 2: Save Your Keys
+3. When prompted:
 
-1. Click **Save private key** → choose a safe location (e.g., `C:\Users\<YourName>\.ssh\myserver.ppk`).
-2. (Optional) Leave **no passphrase** if you want true passwordless login.
-3. Copy the **Public Key** from the top text box (it begins with `ssh-rsa`).
-
----
-
-## 🔹 Step 3: Add Public Key to Your Linux Server
-
-1. Open **PuTTY** and log in **once** using your username and password.
-2. After login, create the `.ssh` directory (if not exists):
-
-   ```bash
-   mkdir -p ~/.ssh
-   chmod 700 ~/.ssh
-   ```
-3. Open the authorized_keys file:
-
-   ```bash
-   nano ~/.ssh/authorized_keys
-   ```
-4. Paste the **public key** you copied from PuTTYgen.
-5. Save and exit (`Ctrl + O`, `Enter`, `Ctrl + X`).
-6. Set proper permissions:
-
-   ```bash
-   chmod 600 ~/.ssh/authorized_keys
-   ```
-7. Exit SSH:
-
-   ```bash
-   exit
-   ```
+   * Press **Enter** to save in the default location:
+     `C:\Users\<username>\.ssh\id_ed25519`
+   * Press **Enter** again for **no passphrase** (optional).
 
 ---
 
-## 🔹 Step 4: Configure PuTTY to Use the Private Key
+## **2. Copy Public Key to Clipboard**
 
-1. Open **PuTTY**.
-2. In the left pane, navigate to:
+Move into the `.ssh` folder:
 
-   ```
-   Connection → SSH → Auth → Credentials
-   ```
-3. Under **Private key file for authentication**, click **Browse** and select your `.ppk` private key file (example: `C:\Users\<YourName>\.ssh\myserver.ppk`).
+```sh
+cd ~/.ssh
+```
 
----
+Copy the public key:
 
-## 🔹 Step 5: Save PuTTY Session
+```sh
+cat .\id_ed25519.pub | Set-Clipboard
+```
 
-1. Go back to **Session** (top of left sidebar).
-2. Enter:
-
-   * **Host Name (or IP address):** your.server.ip
-   * **Port:** 22 (default for SSH)
-   * **Connection type:** SSH
-3. In the **Saved Sessions** box, type a name (e.g., `MyServer-SSH`)
-4. Click **Save**.
-
-Now you have a saved PuTTY profile that remembers your SSH key and server info.
+Your SSH public key is now in your clipboard.
 
 ---
 
-## 🔹 Step 6: Test Connection
+## **3. Log in to the Linux Server**
 
-1. Double-click your saved session (e.g., `MyServer-SSH`).
-2. You should be logged in directly **without entering a password** 🎉
+Use your password one last time:
 
----
-
-## 🔹 Step 7 (Optional): Auto-Login with Username
-
-To avoid even typing the username:
-
-1. In PuTTY, go to:
-
-   ```
-   Connection → Data
-   ```
-2. Under **Auto-login username**, enter your server username (e.g., `ubuntu` or `root`).
-3. Click **Session → Save** again.
-
-Next time — just **double-click your saved session** and you’ll log in automatically. ✅
+```sh
+ssh root@<SERVER-IP>
+```
 
 ---
 
-### 🧩 Summary
+## **4. Add the Public Key to Linux Authorized Keys**
 
-| Step | Description                                              |
-| ---- | -------------------------------------------------------- |
-| 1    | Generate SSH key pair with PuTTYgen                      |
-| 2    | Save private key (.ppk) and copy public key              |
-| 3    | Add public key to `~/.ssh/authorized_keys` on the server |
-| 4    | Configure PuTTY to use private key                       |
-| 5    | Save PuTTY session                                       |
-| 6    | Test connection — passwordless login works               |
-| 7    | (Optional) Add auto-login username                       |
+1. Go to the SSH directory:
+
+```sh
+cd ~/.ssh
+```
+
+2. Open (or create) the authorized keys file:
+
+```sh
+sudo nano authorized_keys
+```
+
+3. Paste your public key (right-click to paste).
+4. Save & exit:
+
+   * **CTRL + O** → Enter
+   * **CTRL + X**
 
 ---
+
+## **5. Set Correct Permissions**
+
+Run:
+
+```sh
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+```
+
+---
+
+## **6. Test Password-less SSH Login**
+
+From your Windows machine:
+
+```sh
+ssh -i ~/.ssh/id_ed25519 root@<SERVER-IP>
+```
+
+You should now log in **without password**.
+
+---
+
+## **7. (Optional) Give Custom Name to the Key**
+
+If you want the key filename to identify your PC (e.g., *ganeshpc*):
+
+```sh
+ssh-keygen -t ed25519 -C "ganeshITD" -f ~/.ssh/id_ed25519_ganeshpc
+```
+
+Then connect using:
+
+```sh
+ssh -i ~/.ssh/id_ed25519_ganeshpc root@<SERVER-IP>
+```
+
+---
+
+# **End of SOP**
