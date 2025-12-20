@@ -1,4 +1,3 @@
-
 ## 🧰 **SOP: Install or Reinstall Imagick Extension for PHP**
 
 ### 🔹 Objective
@@ -9,9 +8,9 @@ To properly uninstall, clean, and reinstall the **Imagick** PHP extension to fix
 
 ### 🔹 Prerequisites
 
-* Root or sudo access
-* PHP and Apache already installed
-* Internet connection for package installation
+- Root or sudo access
+- PHP and Apache already installed
+- Internet connection for package installation
 
 ---
 
@@ -133,4 +132,118 @@ php -m | grep imagick
 imagick
 ```
 
-🎉 **Installation Successful!**
+---
+
+## :x: Error Meaning
+
+```
+attempt to perform an operation not allowed by the security policy `PDF'
+@ error/constitute.c/IsCoderAuthorized/413
+```
+
+:arrow_right: **ImageMagick is blocking PDF processing** due to its **security policy**.
+So when your code tries to **convert PDF → TIFF** (for those AWB numbers), ImageMagick refuses.
+This is **NOT a code bug**. It’s a **server configuration restriction**.
+
+---
+
+## :white_check_mark: Solution: Allow PDF in ImageMagick policy
+
+### :small_blue_diamond: Step 1: Locate `policy.xml`
+
+Run:
+
+```bash
+locate policy.xml
+```
+
+Common paths:
+
+- `/etc/ImageMagick-6/policy.xml`
+- `/etc/ImageMagick-7/policy.xml`
+- `/etc/ImageMagick/policy.xml`
+
+---
+
+### :small_blue_diamond: Step 2: Edit the policy file
+
+```bash
+sudo nano /etc/ImageMagick-6/policy.xml
+```
+
+## (or your actual path)
+
+### :small_blue_diamond: Step 3: Find and **comment/remove** PDF restriction
+
+You’ll see something like this:
+
+```xml
+<policy domain="coder" rights="none" pattern="PDF" />
+```
+
+Change it to:
+
+```xml
+<!-- <policy domain="coder" rights="none" pattern="PDF" /> -->
+```
+
+OR explicitly allow:
+
+```xml
+<policy domain="coder" rights="read|write" pattern="PDF" />
+```
+
+:warning: Do the same for:
+
+- `PS`
+- `EPS`
+- `XPS`
+  (if present)
+
+---
+
+### :small_blue_diamond: Step 4: Restart services
+
+```bash
+sudo systemctl restart apache2
+sudo systemctl restart php-fpm
+```
+
+## (or `httpd` depending on server)
+
+## :white_check_mark: Verify PDF is now allowed
+
+Run:
+
+```bash
+convert -list policy | grep PDF
+```
+
+## You should **NOT** see `rights: None`.
+
+## :white_check_mark: Test TIFF creation manually
+
+```bash
+convert test.pdf test.tiff
+```
+
+## If this works → your AWB TIFF generation will also work.
+
+## :shield: Why this happens
+
+- ImageMagick **disabled PDF by default** after security vulnerabilities
+- PDF uses **Ghostscript**
+- Servers block it unless explicitly enabled
+
+---
+
+## :fire: Important (Production Tip)
+
+If this is a **public server**, also limit resource usage:
+
+```xml
+<policy domain="resource" name="memory" value="256MiB"/>
+<policy domain="resource" name="disk" value="1GiB"/>
+```
+
+---
