@@ -1,7 +1,88 @@
 # Database Alteration SOP
+---
+# A. ADD NEW TABLE — Standard flow
+---
+### 1. Add table query in `create_table_helper.php`
 
-# A. ADD NEW COLUMN — Standard flow
+Add a new function that returns `CREATE TABLE IF NOT EXISTS` SQL.
 
+```php
+if (!function_exists('address_book_email_table_qry')) {
+    function address_book_email_table_qry()
+    {
+        $qry = "CREATE TABLE IF NOT EXISTS `address_book_email` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `status` tinyint(1) NOT NULL DEFAULT 1,
+            `address_book_id` int(11) NOT NULL,
+            `email_id` varchar(255) NOT NULL,
+            `customer_id` int(11) NOT NULL,
+            `customer_code` varchar(255) NOT NULL,
+            `customer_name` varchar(255) NOT NULL,
+            `created_date` datetime NOT NULL,
+            `created_by` int(11) NOT NULL,
+            `modified_date` datetime NOT NULL,
+            `modified_by` int(11) NOT NULL,
+            PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        return $qry;
+    }
+}
+```
+
+### 2. Add table name to `create_all_table` in `database_manage_helper.php`
+
+Add the function name to the `$table_list` so it will be processed:
+
+```php
+$table_list = array(
+    'customer',
+    'shipper',
+    'address_book_email_table_qry'
+);
+```
+
+### 3. Create migration file via Docket_table create_file flow
+
+Update any controller logic that expects the new table name variable, e.g. in `Docket_table.php` adjust:
+
+```php
+if ($tvalue == 'address_book_email_table_qry') {
+    // handle creation
+}
+```
+
+Then run:
+
+```
+http://localhost/trackmate_lite/database_migration/docket_table/create_file
+```
+
+This should generate the migration file in `database_migration`.
+
+### 4. Add create-table query to `script.php` (add_new_table function)
+
+Include the exact `CREATE TABLE IF NOT EXISTS` SQL for the script to run across servers. Example:
+
+```php
+$table_exist_query1 = "CREATE TABLE IF NOT EXISTS `address_book_email` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `status` tinyint(1) NOT NULL DEFAULT 1,
+    `manifest_id` int(11) NOT NULL,
+    `actual_arrival_time` time NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+```
+
+### 5. Run script on all servers
+
+```
+http://localhost/trackmate_lite/script/add_new_table
+```
+
+---
+# B. ADD NEW COLUMN — Standard flow
+---
 ### 1. Add to `create_table_helper.php`
 
 Add the column to the table creation function so new installs get the correct schema.
@@ -90,86 +171,6 @@ ALTER TABLE `address_book_email` DROP COLUMN `address_book_id`;
 * Restore DB from backup if data was corrupted.
 
 ---
-
-# C. ADD NEW TABLE — Standard flow
-
-### 1. Add table query in `create_table_helper.php`
-
-Add a new function that returns `CREATE TABLE IF NOT EXISTS` SQL.
-
-```php
-if (!function_exists('address_book_email_table_qry')) {
-    function address_book_email_table_qry()
-    {
-        $qry = "CREATE TABLE IF NOT EXISTS `address_book_email` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `status` tinyint(1) NOT NULL DEFAULT 1,
-            `address_book_id` int(11) NOT NULL,
-            `email_id` varchar(255) NOT NULL,
-            `customer_id` int(11) NOT NULL,
-            `customer_code` varchar(255) NOT NULL,
-            `customer_name` varchar(255) NOT NULL,
-            `created_date` datetime NOT NULL,
-            `created_by` int(11) NOT NULL,
-            `modified_date` datetime NOT NULL,
-            `modified_by` int(11) NOT NULL,
-            PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
-        return $qry;
-    }
-}
-```
-
-### 2. Add table name to `create_all_table` in `database_manage_helper.php`
-
-Add the function name to the `$table_list` so it will be processed:
-
-```php
-$table_list = array(
-    'customer',
-    'shipper',
-    'address_book_email_table_qry'
-);
-```
-
-### 3. Create migration file via Docket_table create_file flow
-
-Update any controller logic that expects the new table name variable, e.g. in `Docket_table.php` adjust:
-
-```php
-if ($tvalue == 'address_book_email_table_qry') {
-    // handle creation
-}
-```
-
-Then run:
-
-```
-http://localhost/trackmate_lite/database_migration/docket_table/create_file
-```
-
-This should generate the migration file in `database_migration`.
-
-### 4. Add create-table query to `script.php` (add_new_table function)
-
-Include the exact `CREATE TABLE IF NOT EXISTS` SQL for the script to run across servers. Example:
-
-```php
-$table_exist_query1 = "CREATE TABLE IF NOT EXISTS `address_book_email` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `status` tinyint(1) NOT NULL DEFAULT 1,
-    `manifest_id` int(11) NOT NULL,
-    `actual_arrival_time` time NULL DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-```
-
-### 5. Run script on all servers
-
-```
-http://localhost/trackmate_lite/script/add_new_table
-```
 
 
 
