@@ -7,8 +7,6 @@
 
 ## 🧠 PHASE 0 – ENGINEERING MINDSET (FOUNDATION)
 
-**Duration:** 3–4 days
-
 ### Goals
 
 * Think like a designer, not a coder
@@ -31,8 +29,6 @@
 
 ## 📘 PHASE 1 – LLD BASICS
 
-**Duration:** 2–3 days
-
 ### Topics
 
 * What is Low Level Design
@@ -52,8 +48,6 @@
 ---
 
 ## 🧩 PHASE 2 – OOP FUNDAMENTALS
-
-**Duration:** 1 week
 
 ### Topics
 
@@ -80,8 +74,6 @@
 
 ## 🔗 PHASE 3 – CLASS RELATIONSHIPS
 
-**Duration:** 4–5 days
-
 ### Topics
 
 * Association
@@ -105,8 +97,6 @@
 
 ## 🎯 PHASE 4 – DESIGN PRINCIPLES
 
-**Duration:** 1 week
-
 ### Topics
 
 * DRY
@@ -127,8 +117,6 @@
 
 ## 🧱 PHASE 5 – SOLID PRINCIPLES (CORE LLD)
 
-**Duration:** 1 week
-
 ### Topics
 
 * Single Responsibility Principle
@@ -148,8 +136,6 @@
 
 ## 📐 PHASE 6 – UML (JUST ENOUGH)
 
-**Duration:** 3–4 days
-
 ### Focus Areas
 
 * Class Diagrams ⭐⭐⭐
@@ -165,8 +151,6 @@
 ---
 
 ## 🧰 PHASE 7 – DESIGN PATTERNS
-
-**Duration:** 2–3 weeks
 
 ### How to Study Each Pattern
 
@@ -228,8 +212,6 @@
 
 ## ⚡ PHASE 8 – CONCURRENCY & PERFORMANCE
 
-**Duration:** 5–6 days
-
 ### Topics
 
 * Thread safety concepts
@@ -248,8 +230,6 @@
 
 ## 🧪 PHASE 9 – ERROR HANDLING & EXTENSIBILITY
 
-**Duration:** 3–4 days
-
 ### Topics
 
 * Exception handling strategy
@@ -266,8 +246,6 @@
 
 ## 🧠 PHASE 10 – LLD INTERVIEW STRATEGY
 
-**Duration:** 3 days
-
 ### Topics
 
 * How to approach LLD questions
@@ -279,8 +257,6 @@
 ---
 
 ## 🏗️ PHASE 11 – LLD INTERVIEW QUESTIONS (PRACTICE)
-
-**Duration:** 3 weeks
 
 ### Easy
 
