@@ -7,7 +7,7 @@
 
 ## Unit 1
 
-- Arrays
+- [Arrays](CPPTopicWiseQuestion/002.Array.md)
     - Introduction to Arrays
     - Arrays - Prefix Sum
     - Carry Forward & Subarrays
