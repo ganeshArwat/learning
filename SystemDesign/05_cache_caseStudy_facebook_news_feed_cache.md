@@ -1,5 +1,3 @@
-Got it 👍 — here’s your **complete formatted version** of the entire content you provided (situation + schema + explanation), clean and structured for study notes or documentation.
-
 ---
 
 # **Facebook News Feed System Design**

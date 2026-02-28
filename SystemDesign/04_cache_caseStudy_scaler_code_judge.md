@@ -1,7 +1,3 @@
-Got it 👍 — let me reformat your notes into a clean, structured case study write-up with my formation style.
-
----
-
 # 📌 Case Study: Cache Design for Scaler Code Judge
 
 ## 🚦 5-Step Process for Cache Design
