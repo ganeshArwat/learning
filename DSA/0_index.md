@@ -7,7 +7,7 @@
 
 ## Unit 1
 
-- [Arrays](CPPTopicWiseQuestion/002.Array.md)
+- [Arrays](CPPTopicWiseQuestion/002.Array.md) · [CheatSheet](CheatSheet/001_Array_CheatSheet.md)
     - Introduction to Arrays
     - Arrays - Prefix Sum
     - Carry Forward & Subarrays
