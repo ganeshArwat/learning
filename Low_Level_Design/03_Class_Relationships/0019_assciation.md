@@ -499,7 +499,7 @@ Think like a principal engineer.
 ---
 
 ---
-My Answer:
+Your Sample Answer:
 ```
 User -> Order (1 : many)
 Restaurant -> MenuItem (1 : many)
@@ -877,7 +877,7 @@ Do **not rush**.
 ---
 ---
 
-My Answer:
+Your Sample Answer:
 ```
 Payment -> User
 Payment -> PaymentMethod
