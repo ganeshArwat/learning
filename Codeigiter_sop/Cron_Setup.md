@@ -42,7 +42,6 @@ SELECT * FROM `cron_jobs` WHERE `company_id` = <COMPANY_ID>
 
 ## STEP 3: ADD CRON JOB IN THE SERVER To Start the Cron Worker
 
-- replace <COMPANY_ID> with the company id
 - login to the server using ssh
 
 - open crontab file
@@ -52,6 +51,8 @@ sudo crontab -e
 ```
 
 - add the following cron line to the crontab file
+- replace <COMPANY_ID> with the company id
+
 ```bash
 * * * * * COMPANY_ID=<COMPANY_ID> /usr/bin/php /var/www/html/trackmate_lite/index.php cron/cron_worker_new run_once >> /var/www/html/trackmate_lite/ci_worker/cron_worker_<COMPANY_ID>.log 2>&1
 ```
