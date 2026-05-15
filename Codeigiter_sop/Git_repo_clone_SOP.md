@@ -1,4 +1,4 @@
-# Standard Operating Procedure (SOP): Total Repository Reset via Git Bash
+#  A Standard Operating Procedure (SOP): Total Repository Reset via Git Bash
 
 ## Purpose
 
@@ -90,7 +90,7 @@ git push -f origin main
 ```
 
 
-## SOP: Git Repository Mirroring & Environment Alignment
+## B SOP: Git Repository Mirroring & Environment Alignment
 
 ### 1. Repository Mirroring (The "Bridge" Method)
 
