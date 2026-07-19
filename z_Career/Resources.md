@@ -12,9 +12,12 @@
 
 ## AI
 ### AI Engineer Agentic Track: The Complete Agent & MCP Course (Udemy)
-* **Section 4: Week 4 (LangGraph)** -  **25** | **3hr  2min**
-* **Section 5: Week 5 (Microsoft AutoGen)** -  **19** | **2hr 13min**
-* **Section 6: Week 6 (MCP)** -  **26** | **2hr 56min**
+* **Section 1: Week 1 (Foundation)** -  **31** | **5hr  47min**
+* **Section 2: Week 2 (OPEN AI AGENT SDK)** -  **23** | **3hr  53min**
+* **Section 3: Week 3 (CREW AI)** -  **21** | **3hr  23min**
+* **Section 4: Week 4 (LangGraph)** -  **25** | **3hr  6min**
+* **Section 5: Week 5 (AGENT FRAMEWORK - GOOGLE ADK-A2A, AWS STRANDS AGENTS)** -  **19** | **2hr 13min**
+* **Section 6: Week 6 (MCP)** -  **26** | **3hr 22min**
 
 ## MicroSevice
 ### Microservices with Node JS and React (Udemy)
