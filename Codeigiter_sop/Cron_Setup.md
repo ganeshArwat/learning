@@ -47,7 +47,7 @@ SELECT * FROM `cron_jobs` WHERE `company_id` = <COMPANY_ID>
 - open crontab file
 
 ```bash
-sudo crontab -e
+sudo crontab -u www-data -e
 ```
 
 - add the following cron line to the crontab file
